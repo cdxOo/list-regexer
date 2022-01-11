@@ -46,3 +46,7 @@ bump-minor: test
 
 bump-major: test
 	@$(call bump,major)
+
+deploy-github:
+	touch web/.nojekyll
+	git subtree push --prefix web origin gh-pages
