@@ -18,6 +18,7 @@ clean:
 build: clean build-web
 
 build-web: $(BIN) clean
+	touch web/.nojekyll
 	$(BIN)/webpack
 
 dev: $(BIN) clean
@@ -48,5 +49,4 @@ bump-major: test
 	@$(call bump,major)
 
 deploy-github:
-	touch web/.nojekyll
 	git subtree push --prefix web origin gh-pages
