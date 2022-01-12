@@ -17,8 +17,9 @@ clean:
 
 build: clean build-web
 
-build-web: $(BIN) clean
+build-web: $(BIN)
 	touch web/.nojekyll
+	cp -av src/cache.manifest web/
 	$(BIN)/webpack
 
 dev: $(BIN) clean

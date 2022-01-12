@@ -26,6 +26,7 @@
     "formik": ">=2.0",
     "react": ">=16.8",
     "react-dom": ">=16.8",
+    "xregexp": "^5.1.0",
     "@cdxoo/formik-utils": "^0.4.0"
   }
 }

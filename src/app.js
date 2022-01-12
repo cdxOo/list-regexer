@@ -1,4 +1,7 @@
 import React, { useState} from 'react';
+import XRegExp from 'xregexp';
+import testdata from './testdata';
+
 import {
     DefaultForm,
     ThemeContext,
@@ -39,28 +42,48 @@ export const App = (ps) => {
         var { theRegex, outputTransformation, userText } = formData;
         console.log(formData);
 
-        var rx = new RegExp(theRegex);
+        var rx = new XRegExp(theRegex);
         var transformedLines = userText.split(/\n/).map(it => {
-            var matched = it.match(rx);
-            var transformed = (
-                outputTransformation
-                .replace(/\$(\d+)/g, (m, replaceIndex) => {
-                    return matched[replaceIndex];
-                })
-            );
-            return transformed;
+            try {
+                var matched = it.match(rx);
+                console.log(matched);
+                var transformed = (
+                    outputTransformation
+                    .replace(/\$(\d+)/g, (m, replaceIndex) => {
+                        return matched[replaceIndex];
+                    })
+                );
+                return transformed;
+            }
+            catch (e) {
+                console.warn(e);
+            }
         });
 
         setOutput(transformedLines.join("\n"))
     };
 
     var initialValues = {
-        theRegex: '^\\s*\\d+\\.?\\s*(\\w+)\\s*-?\\s*(\\w+)',
+        theRegex: `
+            ^
+            \\s*
+            (?:
+                (?:\\d+\\.?)
+                |
+                [.-]
+            )
+            \\s*
+            (.*?)
+            (?:(?:\\s+\\p{Pd}\\s+)|(?:\\s{2,}))
+            (.*)
+        `.split('\n').map(it => it.replace(/(^\s*|\s*$)/g, '')).join(''),
+
         outputTransformation: '"$1", "$2"',
-        userText: [
-            "   1. MyDude - SomeSong",
+        /*userText: [
+            "   1. My Dude - SomeSong",
             "  2 SomeGirl OtherSong"
-        ].join("\n")
+        ].join("\n")*/
+        userText: testdata.join("\n")
     }
 
     return (
